@@ -4,6 +4,16 @@
 
 
 
+(defn write-chunk-to-file [wr]
+  (let [first? (atom true)]
+    (fn
+      ([])
+      ([result] result)
+      ([_ input]
+       (if @first? (reset! first? false) (.write wr "\n"))
+       (.write wr (clojure.string/join "\n" input))
+       nil))))
+
 (defn csv-row-coll->csv-row-str
   ([seq] (csv-row-coll->csv-row-str "," "\"" seq))
   ([delimiter enclosure seq]
@@ -58,7 +68,7 @@
 
 
 
-#_(defn generate-file
+(defn generate-file
   ([filepath generator-fn limits]
    (generate-file filepath (map identity) generator-fn limits))
   ([filepath xform generator-fn limits]
@@ -72,6 +82,18 @@
                   (write-chunk-to-file w)
                   (repeatedly generator-fn))))))
 
+
+
+#_(defn ptest-gen-file [filepath coll]
+  (with-open [w (-> filepath
+                    clojure.java.io/output-stream
+                    #_java.util.zip.GZIPOutputStream.
+                    clojure.java.io/writer)]
+    (async/pipeline
+     2
+     (chan 100)
+     (comp (xfile) (map #(println %)))
+     (async/to-chan (vec (take 10 coll))))))
 
 #_(defn prun-me [filepath]
   (let [data (map #(map (partial str "celle-") %) (partition 2 (iterate inc 0)))]
@@ -87,16 +109,7 @@
 
 
 
-#_(defn ptest-gen-file [filepath coll]
-  (with-open [w (-> filepath
-                    clojure.java.io/output-stream
-                    #_java.util.zip.GZIPOutputStream.
-                    clojure.java.io/writer)]
-    (async/pipeline
-     2
-     (chan 100)
-     (comp (xfile) (map #(println %)))
-     (async/to-chan (vec (take 10 coll))))))
+
 
 (defn write-bytes-to-file [wr]
   (fn
