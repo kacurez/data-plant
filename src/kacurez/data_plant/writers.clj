@@ -4,8 +4,8 @@
 
 (defn- enforce-limits [limits]
   (cond
-    (contains? limits :max-rows-count) (take (:max-rows-count limits))
-    (contains? limits :max-bytes-count) (take-bytes (:max-bytes-count limits))
+    (= (:unit limits) :rows) (take (:size limits))
+    (= (:unit limits) :bytes) (take-bytes (:size limits))
     (contains? limits :custom-limit-xform) (:custom-limit-xform limits)
     :else (throw (ex-info "limits must be specified!" {}))))
 
