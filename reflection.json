@@ -1,0 +1,22 @@
+[
+{
+    "name" : "java.lang.String",
+    "methods" : [
+      { "name" : "getBytes", "parameterTypes" : [] }
+    ],
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true
+  },
+  {
+    "name": "java.io.BufferedWriter",
+    "methods" : [
+      { "name" : "close", "parameterTypes" : [] }
+    ],
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true
+  }
+]
