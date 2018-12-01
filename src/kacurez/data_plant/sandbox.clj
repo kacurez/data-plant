@@ -73,8 +73,8 @@
    (generate-file filepath (map identity) generator-fn limits))
   ([filepath xform generator-fn limits]
    (let [xlimit (cond
-                  (contains? limits :max-rows-count) (take (:max-rows-count limits))
-                  (contains? limits :max-bytes-count) (take-bytes (:max-bytes-count limits))
+                  (contains? limits :rows) (take (:rows limits))
+                  (contains? limits :bytes) (take-bytes (:bytes limits))
                   (contains? limits :custom-limit-xform) (:custom-limit-xform limits)
                   :else (throw (ex-info "limits must be specified!" {})))]
      (with-open [w (clojure.java.io/writer filepath)]
@@ -118,3 +118,6 @@
     ([_ input]
      (.write wr input)
      nil)))
+
+
+;;; (with-open [w (clojure.java.io/output-stream "pokusnew")] (write-static-csv w ["asdasd"] {:max-bytes-count (:size (parse "50KB"))} {}))
