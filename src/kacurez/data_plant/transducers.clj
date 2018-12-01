@@ -1,5 +1,4 @@
-(ns kacurez.data-plant.transducers
-  (:require [clojure.core.async :as async :refer [chan close!]]))
+(ns kacurez.data-plant.transducers)
 
 (defn take-bytes [limit-size]
   (fn [xf]
