@@ -1,0 +1,23 @@
+sudo: required
+language: bash
+
+services:
+  - docker
+
+before_install:
+  - docker-compose -v
+  - docker -v
+
+before_script:
+  - export APP_IMAGE=kacurez/data-plant
+  - docker build -t $APP_IMAGE .
+  - docker tag $APP_IMAGE:latest $APP_IMAGE:test
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push $APP_IMAGE:test
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: bash deploy.sh
+  on:
+    branch: master
