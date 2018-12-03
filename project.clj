@@ -9,7 +9,8 @@
   :main ^:skip-aot kacurez.data-plant.cli.core
   :plugins [[io.taylorwood/lein-native-image "0.3.0"]]
   :target-path "target/%s"
-  :native-image {:opts ["--verbose" "--no-server" "--enable-url-protocols=http,https" "-H:ReflectionConfigurationFiles=reflection.json" "--report-unsupported-elements-at-runtime"]
+  :native-image {:graal-bin :env/GRAALVM_HOME
+                 :opts ["--verbose" "--no-server" "--static" "--enable-url-protocols=http,https" "-H:ReflectionConfigurationFiles=reflection.json" "--report-unsupported-elements-at-runtime" ]
                  :name "data-plant"}
 
   ;; optionally set profile-specific :native-image overrides
