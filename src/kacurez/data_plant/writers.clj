@@ -36,14 +36,14 @@
 
 (defn write-csv-from-maps
   [output-stream maps-generator header-coll limits
-                    {:keys [delimiter enclosure]
-                     :or {delimiter "," enclosure "\""}, :as csv-options}]
+   {:keys [delimiter enclosure]
+    :or {delimiter "," enclosure "\""}, :as csv-options}]
   (let [csv-from-map-colls
         (comp
          (maps-to-colls header-coll)
          (add-header-coll header-coll)
          (colls-to-csv-stringlines delimiter enclosure))]
-    (write-to-stream output-stream csv-from-map-colls maps-generator  limits )))
+    (write-to-stream output-stream csv-from-map-colls maps-generator  limits)))
 
 (defn write-csv-from-spec [output-stream spec-map limits csv-options]
   (let [header (keys spec-map)

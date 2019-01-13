@@ -12,7 +12,6 @@
 (defn parse [size-str]
   (let [[_ number order unit] (re-matches (re-pattern size-patern) size-str)
         order-num (order-map (clojure.string/lower-case (or order ""))  1)]
-    #_(println number order-num unit order)
     (if (and number unit)
       {:size (* (Integer/parseInt number) order-num)
        :unit (unit-map (clojure.string/lower-case unit))})))

@@ -3,10 +3,7 @@
             [clojure.tools.cli :refer [parse-opts]]
             [kacurez.data-plant.size-parser :as size-parser]
             [kacurez.data-plant.cli.random-file :as random-file])
-  (:gen-class)
-  )
-
-
+  (:gen-class))
 
 (def cli-options
   [;; First three strings describe a short-option, long-option with optional
@@ -71,5 +68,4 @@
   (let [{:keys [limits options exit-message ok?]} (validate-args args)]
     (if exit-message
       (exit (if ok? 0 1) exit-message)
-      (random-file/generate (size-parser/parse limits))
-      )))
+      (random-file/generate (size-parser/parse limits)))))

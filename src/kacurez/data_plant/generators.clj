@@ -5,7 +5,7 @@
 (def ascii-chars (map char (range 32 127)))
 
 (defn random-string
-  ([fix-size ] (random-string fix-size ascii-chars))
+  ([fix-size] (random-string fix-size ascii-chars))
   ([fix-size chars] (apply str (take fix-size (repeatedly #(rand-nth chars))))))
 
 (defn random-string-var-size
