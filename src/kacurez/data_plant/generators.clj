@@ -21,7 +21,12 @@
 (defn random-string-map
   ([map-keys string-size] (random-string-map map-keys string-size ascii-chars))
   ([map-keys string-size chars]
-   (into {} (map #(vec (list % (random-string string-size chars))) map-keys))))
+   (into {} (map #(vector % (random-string string-size chars)) map-keys))))
 
 (defn random-map-from-spec [spec-map]
-  (into {} (map (fn [[k v]] (vec (list k (gen/generate (s/gen v))))) spec-map)))
+  (into {} (map (fn [[k v]] (vector k (gen/generate (s/gen v)))) spec-map)))
+
+(defn random-map-from-functions-map [functions-map]
+  (into {} (map
+            (fn [[key data-generator-function]] (vector (str key) (str (data-generator-function))))
+            functions-map)))
