@@ -27,7 +27,6 @@
 (defn add-new-line []
   (map #(str % "\n")))
 
-
 (defn colls-to-csv-stringlines
   ([] (colls-to-csv-stringlines "," "\""))
   ([delimiter enclosure]
@@ -35,7 +34,6 @@
     (csv-enclose-columns enclosure)
     (csv-delimit-columns delimiter)
     (add-new-line))))
-
 
 (defn add-header-coll [header-coll]
   (fn [xf]
