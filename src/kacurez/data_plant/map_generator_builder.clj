@@ -13,12 +13,12 @@
    'neg-int neg-int?
    'nat-int nat-int?})
 
-(defn make-symbol-gen-fn [symbol-def]
+(defn- make-symbol-gen-fn [symbol-def]
   (if-let [symbol-spec (symbols-specs-map symbol-def)]
     (fn [] (gen/generate (s/gen symbol-spec)))
     (constantly symbol-def)))
 
-(defn constant? [value]
+(defn- constant? [value]
   (some #(% value) [int? string? boolean? float? char?]))
 
 (defn- prepare-string [definition-string]
@@ -27,7 +27,7 @@
       (str "{" trimed-string "}")
       trimed-string)))
 
-(defn parse-definition-value [_])
+(defn- parse-definition-value [_])
 
 (defn- make-oneof-gen-fn [oneof-options-list]
   (if-let [options (map parse-definition-value oneof-options-list)]
