@@ -1,6 +1,5 @@
 (ns kacurez.data-plant.generators
-  (:require [clojure.spec.alpha :as s]
-            [clojure.spec.gen.alpha :as gen]))
+  #_(:require [clojure.data.generators :as gen]))
 
 (def ascii-chars (map char (range 32 127)))
 
@@ -23,8 +22,8 @@
   ([map-keys string-size chars]
    (into {} (map #(vector % (random-string string-size chars)) map-keys))))
 
-(defn random-map-from-spec [spec-map]
-  (into {} (map (fn [[k v]] (vector k (gen/generate (s/gen v)))) spec-map)))
+#_(defn random-map-from-spec [spec-map]
+    (into {} (map (fn [[k v]] (vector k (gen/generate (s/gen v)))) spec-map)))
 
 (defn random-map-from-functions-map [functions-map]
   (into {} (map
