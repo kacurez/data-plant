@@ -10,10 +10,9 @@
   :main ^:skip-aot kacurez.data-plant.cli.core
   :plugins [[io.taylorwood/lein-native-image "0.3.0"]]
   :target-path "target/"
-  :native-image {:fgraal-bin :env/GRAALVM_HOME
-                 :opts ["--verbose"
+  :native-image {:opts ["--verbose"
                         "--no-server"
-                        ;;"--static"
+                        "--initialize-at-build-time"
                         "--enable-url-protocols=http,https"
                         "-H:ReflectionConfigurationFiles=reflection.json"
                         "-H:+ReportExceptionStackTraces"
@@ -24,6 +23,16 @@
   :profiles {:test    ;; e.g. lein with-profile +test native-image
              {:native-image {:opts ["--report-unsupported-elements-at-runtime"
                                     "--verbose"]}}
+
+             :docker-build
+             {:native-image {:opts ["--verbose"
+                                    "--no-server"
+                                    "--static"
+                                    "--initialize-at-build-time"
+                                    "--enable-url-protocols=http,https"
+                                    "-H:ReflectionConfigurationFiles=reflection.json"
+                                    "-H:+ReportExceptionStackTraces"
+                                    "--report-unsupported-elements-at-runtime"]}}
 
              :uberjar ;; used by default
              {:aot :all
