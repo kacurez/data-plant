@@ -11,6 +11,7 @@
   :plugins [[io.taylorwood/lein-native-image "0.3.0"]]
   :target-path "target/"
   :native-image {:opts ["--verbose"
+                        "--no-fallback"
                         "--no-server"
                         "--initialize-at-build-time"
                         "--enable-url-protocols=http,https"
@@ -26,6 +27,7 @@
 
              :docker-build
              {:native-image {:opts ["--verbose"
+                                    "--no-fallback"
                                     "--no-server"
                                     "--static"
                                     "--initialize-at-build-time"
