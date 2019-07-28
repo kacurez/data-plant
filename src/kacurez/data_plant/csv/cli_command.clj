@@ -1,10 +1,12 @@
-(ns kacurez.data-plant.cli.csv
-  (:require   [clojure.string :as string]
-              [clojure.tools.cli :refer [parse-opts]]
-              [kacurez.data-plant.writers :refer [write-csv-from-maps]]
-              [kacurez.data-plant.generators :refer [random-map-from-functions-map]]
-              [kacurez.data-plant.size-parser :as size-parser]
-              [kacurez.data-plant.map-generator-builder :refer [parse-functions-map]]))
+(ns kacurez.data-plant.csv.cli-command
+  (:require [clojure.string :as string]
+            [clojure.tools.cli :refer [parse-opts]]
+            [kacurez.data-plant.csv.definition-map-parser
+             :refer
+             [parse-functions-map]]
+            [kacurez.data-plant.csv.size-parser :as size-parser]
+            [kacurez.data-plant.generators :refer [random-map-from-functions-map]]
+            [kacurez.data-plant.csv.writer :refer [write-csv-from-maps]]))
 
 (defn usage [options-summary]
   (->> ["Usage: data-plant csv size definition-map"

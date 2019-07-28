@@ -1,9 +1,8 @@
-(ns kacurez.data-plant.cli.core
+(ns kacurez.data-plant.cli
+  (:gen-class)
   (:require [clojure.string :as string]
             [clojure.tools.cli :refer [parse-opts]]
-            [kacurez.data-plant.cli.csv :as csv-command]
-            #_[kacurez.data-plant.cli.random-file :as random-file])
-  (:gen-class))
+            [kacurez.data-plant.csv.cli-command :as csv-command]))
 
 (def cli-options
   [["-h" "--help"]])

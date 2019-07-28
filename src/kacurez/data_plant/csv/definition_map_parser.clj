@@ -1,4 +1,4 @@
-(ns kacurez.data-plant.map-generator-builder
+(ns kacurez.data-plant.csv.definition-map-parser
   (:require [clojure.tools.reader.edn :as edn]
             [kacurez.data-plant.generators :as gen]))
 
