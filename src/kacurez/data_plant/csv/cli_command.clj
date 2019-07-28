@@ -27,12 +27,13 @@
 
 (def cli-options
   [["-h" "--help"]
+   ["-g" "--gzip-output" "gzip output, size is not applied to the gziped content(default false)" :id :gzip? :default false]
    ["-e" "--enclosure ENCLOSURE" "csv enclosure" :default "\""]
    ["-d" "--delimiter DELIMITER" "csv delimiter" :default ","]])
 
 (defn run [parsed-size parsed-definition-map options]
   (write-csv-from-maps
-   *out*
+   System/out
    #(random-map-from-functions-map parsed-definition-map)
    (map str (keys parsed-definition-map))
    parsed-size

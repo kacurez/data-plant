@@ -7,8 +7,9 @@
      output-stream)))
 
 (defn write-to-stream
-  ([output-stream coll-generator limits] (write-to-stream output-stream (map identity) coll-generator limits))
-  ([output-stream xf coll-generator {:keys [gzip?] :or {gzip? false}}]
+  ([output-stream coll-generator gzip?]
+   (write-to-stream output-stream (map identity) coll-generator gzip?))
+  ([output-stream xf coll-generator gzip?]
    (with-open [writer (prepare-stream-writer output-stream gzip?)]
      (transduce (comp
                  xf
@@ -18,11 +19,11 @@
                   (repeatedly coll-generator) coll-generator)))))
 
 (defn gen-file
-  ([filepath coll-generator limits]
-   (gen-file filepath (map identity) coll-generator limits))
-  ([filepath xf coll-generator limits]
+  ([filepath coll-generator gzip?]
+   (gen-file filepath (map identity) coll-generator gzip?))
+  ([filepath xf coll-generator gzip?]
    (with-open [w (clojure.java.io/output-stream filepath)]
-     (write-to-stream w xf coll-generator limits))))
+     (write-to-stream w xf coll-generator gzip?))))
 
 (defn write-static-content [output-stream string-row limits]
   (write-to-stream output-stream (constantly string-row) limits))

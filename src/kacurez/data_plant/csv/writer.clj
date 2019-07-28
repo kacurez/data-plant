@@ -5,15 +5,15 @@
 
 (defn write-csv-from-maps
   [output-stream maps-generator header-coll size-limiter
-   {:keys [delimiter enclosure]
-    :or {delimiter "," enclosure "\""}}]
+   {:keys [delimiter enclosure gzip?]
+    :or {delimiter "," enclosure "\"" gzip? false}}]
   (let [csv-from-map-colls
         (comp
          (maps-to-colls header-coll)
          (add-header-coll header-coll)
          (colls-to-csv-stringlines delimiter enclosure)
          size-limiter)]
-    (write-to-stream output-stream csv-from-map-colls maps-generator {})))
+    (write-to-stream output-stream csv-from-map-colls maps-generator gzip?)))
 
 #_(defn write-csv-from-spec [output-stream spec-map limits csv-options]
     (let [header (keys spec-map)
