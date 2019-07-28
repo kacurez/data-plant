@@ -13,7 +13,7 @@
          (add-header-coll header-coll)
          (colls-to-csv-stringlines delimiter enclosure)
          size-limiter)]
-    (write-to-stream output-stream csv-from-map-colls maps-generator)))
+    (write-to-stream output-stream csv-from-map-colls maps-generator {})))
 
 #_(defn write-csv-from-spec [output-stream spec-map limits csv-options]
     (let [header (keys spec-map)
