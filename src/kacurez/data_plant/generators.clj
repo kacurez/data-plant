@@ -1,9 +1,38 @@
 (ns kacurez.data-plant.generators
-  #_(:require [clojure.data.generators :as gen]))
+  (:require [clojure.data.generators :as gen]))
 
 (def ascii-chars (map char (range 32 127)))
 
+(def max-random-int Integer/MAX_VALUE)
+
+(defn abs [number]
+  (if (> 0 number)
+    (* -1 number)
+    number))
+
+(defn random-number
+  ([max-random-int] (abs (rem (random-number) max-random-int)))
+  ([]
+   (binding [gen/*rnd* (java.util.Random.)]
+     (gen/int))))
+
+(defn random-pos-int [] (abs (random-number)))
+
+(defn random-neg-int [] (* -1 (random-number)))
+
+(defn random-date []
+  (binding [gen/*rnd* (java.util.Random.)]
+    (gen/date)))
+
+(defn random-uuid [] (java.util.UUID/randomUUID))
+
+(defn random-float [] (* (gen/float) (random-number)))
+
+(defn random-boolean [] (gen/boolean))
+
 (defn random-string
+  ([] (binding [gen/*rnd* (java.util.Random.)]
+        (gen/string)))
   ([fix-size] (random-string fix-size ascii-chars))
   ([fix-size chars] (apply str (take fix-size (repeatedly #(rand-nth chars))))))
 

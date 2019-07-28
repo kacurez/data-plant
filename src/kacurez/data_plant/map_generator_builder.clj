@@ -1,37 +1,16 @@
 (ns kacurez.data-plant.map-generator-builder
   (:require [clojure.tools.reader.edn :as edn]
-            [clojure.data.generators :as gen]))
-
-(def max-random-int Integer/MAX_VALUE)
-
-(defn abs [number]
-  (if (> 0 number)
-    (* -1 number)
-    number))
-
-(defn random-number
-  ([max-random-int] (abs (rem (random-number) max-random-int)))
-  ([]
-   (binding [gen/*rnd* (java.util.Random.)]
-     (gen/int))))
-
-(defn random-string []
-  (binding [gen/*rnd* (java.util.Random.)]
-    (gen/string)))
-
-(defn random-date []
-  (binding [gen/*rnd* (java.util.Random.)]
-    (gen/date)))
+            [kacurez.data-plant.generators :as gen]))
 
 (def symbols-specs-map
-  {'int random-number
-   'string random-string
-   'date random-date
-   'uuid (fn [] (java.util.UUID/randomUUID))
-   'float #(* (gen/float) (random-number))
-   'boolean #(gen/boolean)
-   'pos-int #(abs (random-number))
-   'neg-int #(* -1 (abs (random-number)))})
+  {'int gen/random-number
+   'string gen/random-string
+   'date gen/random-date
+   'uuid gen/random-uuid
+   'float gen/random-float
+   'boolean gen/random-boolean
+   'pos-int gen/random-pos-int
+   'neg-int gen/random-neg-int})
 
 (defn make-symbol-gen-fn [symbol-def]
   (if-let [symbol-fn (symbols-specs-map symbol-def)]
@@ -52,7 +31,7 @@
 (defn- make-oneof-gen-fn [oneof-options-list]
   (if-let [options (map parse-definition-value oneof-options-list)]
     (fn []
-      (let [option-gen-fn (nth options (random-number (count options)))]
+      (let [option-gen-fn (nth options (gen/random-number (count options)))]
         (option-gen-fn)))
     (constantly "")))
 
