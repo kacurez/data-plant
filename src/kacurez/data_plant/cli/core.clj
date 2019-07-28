@@ -52,7 +52,7 @@
       {:exit-message (or (:exit-message subcommand) (usage summary))})))
 
 (defn exit [status msg]
-  (println msg)
+  (.println *err* msg)
   (System/exit status))
 
 (defn -main [& args]
