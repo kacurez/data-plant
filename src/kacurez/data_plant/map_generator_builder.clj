@@ -50,5 +50,5 @@
   (try
     (let [definition-map (edn/read-string (prepare-string definition-string))]
       (into {} (map parse-definition-pair definition-map)))
-    (catch Exception e (throw (str "csv definition map parse error:"
-                                           (.getMessage e))))))
+    (catch Exception e (throw (Exception. (str "csv definition map parse error: "
+                                               (.getMessage e)))))))

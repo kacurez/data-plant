@@ -26,7 +26,7 @@
     (condp = (first args)
       "csv" (csv-command/parse-args (rest args))
       nil)
-    (catch Exception e {:exit-message (str (first args) " command parse error:"
+    (catch Exception e {:exit-message (str (first args) " command parse error: "
                                            (.getMessage e))})))
 
 (defn validate-args

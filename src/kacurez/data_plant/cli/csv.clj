@@ -7,9 +7,8 @@
               [kacurez.data-plant.map-generator-builder :refer [parse-functions-map]]))
 
 (def usage
-  (->> ["Generate a file limited to size or number of lines."
-        ""
-        "Usage: data-plant csv size definition-map"
+  (->> ["Usage: data-plant csv size definition-map"
+        "Generate a csv file to std out limited by size and defined by definition-map."
         ""
         "size (<number><scale(K|M|G)><unit>(b|bytes|rows)>):"
         "  50MB    - generate 50 megabytes file"
@@ -32,10 +31,15 @@
    parsed-size
    {:delimiter "," :enclosure "\""}))
 
+(defn prepare-run-command [size-cli-arg definition-cli-arg]
+  (let [parsed-size (size-parser/parse size-cli-arg)
+        parsed-definition (parse-functions-map definition-cli-arg)]
+    {:run #(run parsed-size parsed-definition)}))
+
 (defn parse-args [args]
   (let [{:keys [options arguments errors]} (parse-opts args cli-options)
-        parsed-size (size-parser/parse (or (first arguments) ""))
-        parsed-definition (parse-functions-map (or (second arguments) ""))]
+        size (first arguments)
+        definition (second arguments)]
     (cond
       (:help options)
       {:exit-message usage}
@@ -44,8 +48,8 @@
       {:exit-message (string/join \newline errors)}
 
       (and
-       (some? parsed-size)
-       (some? parsed-definition))
-      {:run #(run parsed-size parsed-definition)}
+       (some? size)
+       (some? definition))
+      (prepare-run-command size definition)
 
       :else {:exit-message usage})))
