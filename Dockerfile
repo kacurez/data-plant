@@ -1,8 +1,8 @@
 FROM ubuntu AS BASE
-ARG GRAAL_VERSION=19.1.0
 RUN apt-get update
 RUN apt-get install -yy curl leiningen build-essential zlib1g-dev
 RUN mkdir /opt/graalvm
+ARG GRAAL_VERSION=19.1.1
 RUN cd /opt && curl -sL https://github.com/oracle/graal/releases/download/vm-${GRAAL_VERSION}/graalvm-ce-linux-amd64-${GRAAL_VERSION}.tar.gz | tar -xzf -
 RUN ls /opt/graalvm-ce-${GRAAL_VERSION}
 RUN /opt/graalvm-ce-${GRAAL_VERSION}/bin/gu install native-image
