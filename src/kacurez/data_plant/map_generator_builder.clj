@@ -43,8 +43,12 @@
                         'oneOf (make-oneof-gen-fn (rest def-value)))
     (nil? def-value) (constantly "nil")))
 
+(defn- parse-definition-pair [[def-name, def-value]]
+  [def-name (parse-definition-value def-value)])
+
 (defn parse-functions-map [definition-string]
-  (let [definition-map (edn/read-string (prepare-string definition-string))]
-    (into {} (map
-              (fn [[def-name, def-value]] [def-name (parse-definition-value def-value)])
-              definition-map))))
+  (try
+    (let [definition-map (edn/read-string (prepare-string definition-string))]
+      (into {} (map parse-definition-pair definition-map)))
+    (catch Exception e (throw (str "csv definition map parse error:"
+                                           (.getMessage e))))))
