@@ -12,6 +12,10 @@
 (defn parse [size-str]
   (let [[_ number order unit] (re-matches (re-pattern size-patern) size-str)
         order-num (order-map (clojure.string/lower-case (or order ""))  1)]
-    (if (and number unit)
+    (cond
+      (nil? number) (throw (Exception. (str "size parse error: wrong number:" size-str)))
+      (nil? unit) (throw (Exception. (str "size parse error: wrong unit:" size-str)))
+      (and (= order-num 1) (some? order)) (throw (Exception. (str "size parse error: wrong scale:" size-str)))
+      :else
       {:size (* (Integer/parseInt number) order-num)
        :unit (unit-map (clojure.string/lower-case unit))})))

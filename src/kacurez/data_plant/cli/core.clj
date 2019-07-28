@@ -2,8 +2,7 @@
   (:require [clojure.string :as string]
             [clojure.tools.cli :refer [parse-opts]]
             [kacurez.data-plant.cli.csv :as csv-command]
-            [kacurez.data-plant.size-parser :as size-parser]
-            [kacurez.data-plant.cli.random-file :as random-file])
+            #_[kacurez.data-plant.cli.random-file :as random-file])
   (:gen-class))
 
 (def cli-options
@@ -15,16 +14,10 @@
         "Usage: data-plant command [options]"
         ""
         "Commands:"
-        "csv"
+        "csv - generate a csv file limited to a size or number of lines"
         ""
         "Options:"
         options-summary
-        ""
-        "limits(<number><scale(K|M|G)><unit>(b|bytes|rows)>):"
-        "  50MB    - generate 50 megabytes file"
-        "  50Krows - generate 50 000 lines file"
-        "  1KB  - generate 1 kilobyte file"
-        "  2GB  - generate 2 gigabytes file"
         ""]
        (string/join \newline)))
 
@@ -32,15 +25,22 @@
   (str "The following errors occurred while parsing your command:\n\n"
        (string/join \newline errors)))
 
-(defn try-parse-command [args]
-  (csv-command/validate-args args))
+(defn try-parse-subcommand [args]
+  (try
+    (condp = (first args)
+      "csv" (csv-command/parse-args (rest args))
+      nil)
+    (catch Exception e {:exit-message (str (first args) " command parse error:"
+                                           (.getMessage e))})))
 
 (defn validate-args
   "Validate command line arguments. Either return a map indicating the program
   should exit (with a error message, and optional ok status), or a map
   indicating the limit the program should take and the options provided."
   [args]
-  (let [{:keys [options arguments errors summary]} (parse-opts args cli-options :in-order true)]
+  (let [parsed-options (parse-opts args cli-options :in-order true)
+        {:keys [options arguments errors summary]} parsed-options
+        subcommand (try-parse-subcommand arguments)]
     (cond
       (:help options) ; help => exit OK with usage summary
       {:exit-message (usage summary) :ok? true}
@@ -48,20 +48,19 @@
       errors ; errors => exit with description of errors
       {:exit-message (error-msg errors)}
 
-      ;; custom validation on arguments
-      (and (some? (:args (try-parse-command arguments))))
-      (assoc (try-parse-command arguments) :command csv-command/run)
+      ;; parse subcommand
+      (and (some? subcommand) (empty? (:exit-message subcommand)))
+      {:subcommand  subcommand}
 
       :else ; failed custom validation => exit with usage summary
-      {:exit-message (usage summary)})))
+      {:exit-message (or (:exit-message subcommand) (usage summary))})))
 
 (defn exit [status msg]
   (println msg)
-  #_(System/exit status))
+  (System/exit status))
 
 (defn -main [& args]
-  (let [{:keys [command args options exit-message ok?]} (validate-args args)]
+  (let [{:keys [subcommand exit-message ok?]} (validate-args args)]
     (if exit-message
       (exit (if ok? 0 1) exit-message)
-      (csv-command/run args)
-      #_(random-file/generate (size-parser/parse limits)))))
+      ((:run subcommand)))))
