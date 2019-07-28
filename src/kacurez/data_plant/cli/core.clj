@@ -21,10 +21,6 @@
         ""]
        (string/join \newline)))
 
-(defn error-msg [errors]
-  (str "The following errors occurred while parsing your command:\n\n"
-       (string/join \newline errors)))
-
 (defn try-parse-subcommand [args]
   (try
     (condp = (first args)
@@ -46,7 +42,7 @@
       {:exit-message (usage summary) :ok? true}
 
       errors ; errors => exit with description of errors
-      {:exit-message (error-msg errors)}
+      {:exit-message (string/join \newline errors)}
 
       ;; parse subcommand
       (and (some? subcommand) (empty? (:exit-message subcommand)))
