@@ -1,5 +1,5 @@
 (ns kacurez.data-plant.csv.size-parser
-  (:require [kacurez.data-plant.transducers :refer [take-bytes]]))
+  (:require [kacurez.data-plant.transduction :refer [take-bytes]]))
 
 (def KB 1000)
 (def MB (* 1000 KB))
