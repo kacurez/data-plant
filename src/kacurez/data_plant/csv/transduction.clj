@@ -1,8 +1,8 @@
-(ns kacurez.data-plant.csv.writer
+(ns kacurez.data-plant.csv.transduction
   (:require [kacurez.data-plant.csv.transducers
              :refer
              [add-header-coll colls-to-csv-stringlines maps-to-colls]]
-            [kacurez.data-plant.writer :refer [transduce-to-stream]]))
+            [kacurez.data-plant.transduction :refer [transduce-to-stream]]))
 
 (defn transduce-csv-to-stream
   [output-stream maps-generator-fn header-coll size-limiter

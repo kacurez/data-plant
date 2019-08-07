@@ -5,8 +5,8 @@
              :refer
              [parse-functions-map]]
             [kacurez.data-plant.csv.size-parser :as size-parser]
-            [kacurez.data-plant.generators :refer [random-map-from-functions-map]]
-            [kacurez.data-plant.csv.writer :refer [transduce-csv-to-stream]]))
+            [kacurez.data-plant.csv.transduction :refer [transduce-csv-to-stream]]
+            [kacurez.data-plant.generators :refer [random-map-from-functions-map]]))
 
 (defn usage [options-summary]
   (->> ["Usage: data-plant csv size definition-map"

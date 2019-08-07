@@ -1,4 +1,4 @@
-(ns kacurez.data-plant.writer)
+(ns kacurez.data-plant.transduction)
 
 (defn- prepare-stream-writer [output-stream gzip?]
   (clojure.java.io/writer
