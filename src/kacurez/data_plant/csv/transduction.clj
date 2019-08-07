@@ -36,15 +36,17 @@
 (defn maps-to-colls [header]
   (map (fn [line-map] (map #(line-map % "") header))))
 
+(defn compose-csv-xf [size-limiter header-coll delimiter enclosure]
+  (comp
+   (maps-to-colls header-coll)
+   (add-header-coll header-coll)
+   (colls-to-csv-stringlines delimiter enclosure)
+   size-limiter))
+
 (defn transduce-csv-to-stream
   [output-stream maps-generator-fn header-coll size-limiter
    {:keys [delimiter enclosure gzip?]
     :or {delimiter "," enclosure "\"" gzip? false}}]
   (let [map-cols (repeatedly maps-generator-fn)
-        csv-xf
-        (comp
-         (maps-to-colls header-coll)
-         (add-header-coll header-coll)
-         (colls-to-csv-stringlines delimiter enclosure)
-         size-limiter)]
+        csv-xf (compose-csv-xf size-limiter header-coll delimiter enclosure)]
     (transduce-to-stream output-stream csv-xf map-cols gzip?)))
