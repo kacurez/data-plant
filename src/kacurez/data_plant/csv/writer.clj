@@ -1,25 +1,18 @@
 (ns kacurez.data-plant.csv.writer
-  (:require [kacurez.data-plant.writers :refer [write-to-stream]]
-            [kacurez.data-plant.csv.transducers
-             :refer [maps-to-colls add-header-coll colls-to-csv-stringlines]]))
+  (:require [kacurez.data-plant.csv.transducers
+             :refer
+             [add-header-coll colls-to-csv-stringlines maps-to-colls]]
+            [kacurez.data-plant.writer :refer [transduce-to-stream]]))
 
-(defn write-csv-from-maps
-  [output-stream maps-generator header-coll size-limiter
+(defn transduce-csv-to-stream
+  [output-stream maps-generator-fn header-coll size-limiter
    {:keys [delimiter enclosure gzip?]
     :or {delimiter "," enclosure "\"" gzip? false}}]
-  (let [csv-from-map-colls
+  (let [map-cols (repeatedly maps-generator-fn)
+        csv-xf
         (comp
          (maps-to-colls header-coll)
          (add-header-coll header-coll)
          (colls-to-csv-stringlines delimiter enclosure)
          size-limiter)]
-    (write-to-stream output-stream csv-from-map-colls maps-generator gzip?)))
-
-#_(defn write-csv-from-spec [output-stream spec-map limits csv-options]
-    (let [header (keys spec-map)
-          maps-generator #(random-map-from-spec spec-map)]
-      (write-csv-from-maps output-stream  maps-generator header limits csv-options)))
-
-#_(defn write-static-csv [output-stream row-coll limits csv-options]
-    (let [row-map (into {} (map #(vec (list % %)) row-coll))]
-      (write-csv-from-maps output-stream (constantly row-map) row-coll limits csv-options)))
+    (transduce-to-stream output-stream csv-xf map-cols gzip?)))

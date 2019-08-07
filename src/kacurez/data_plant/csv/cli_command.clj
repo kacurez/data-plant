@@ -6,7 +6,7 @@
              [parse-functions-map]]
             [kacurez.data-plant.csv.size-parser :as size-parser]
             [kacurez.data-plant.generators :refer [random-map-from-functions-map]]
-            [kacurez.data-plant.csv.writer :refer [write-csv-from-maps]]))
+            [kacurez.data-plant.csv.writer :refer [transduce-csv-to-stream]]))
 
 (defn usage [options-summary]
   (->> ["Usage: data-plant csv size definition-map"
@@ -32,7 +32,7 @@
    ["-d" "--delimiter DELIMITER" "csv delimiter" :default ","]])
 
 (defn run [parsed-size parsed-definition-map options]
-  (write-csv-from-maps
+  (transduce-csv-to-stream
    System/out
    #(random-map-from-functions-map parsed-definition-map)
    (map str (keys parsed-definition-map))
