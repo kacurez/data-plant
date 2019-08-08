@@ -1,4 +1,4 @@
-(ns kacurez.data-plant.csv.definition-map-parser
+(ns kacurez.data-plant.parsers.data-definition-parser
   (:require [clojure.tools.reader.edn :as edn]
             [kacurez.data-plant.generators :as gen]))
 
@@ -46,9 +46,9 @@
 (defn- parse-definition-pair [[def-name, def-value]]
   [def-name (parse-definition-value def-value)])
 
-(defn parse-functions-map [definition-string]
+(defn parse-definition-map [definition-string]
   (try
     (let [definition-map (edn/read-string (prepare-string definition-string))]
       (into {} (map parse-definition-pair definition-map)))
-    (catch Exception e (throw (Exception. (str "csv definition map parse error: "
+    (catch Exception e (throw (Exception. (str "data definition parse error: "
                                                (.getMessage e)))))))

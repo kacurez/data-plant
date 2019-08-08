@@ -1,4 +1,4 @@
-(ns kacurez.data-plant.csv.size-parser
+(ns kacurez.data-plant.parsers.size-parser
   (:require [kacurez.data-plant.transduction :refer [take-bytes]]))
 
 (def KB 1000)
@@ -14,13 +14,6 @@
   (case unit
     :rows (take size)
     :bytes (take-bytes size)))
-
-#_(defn- enforce-limits [limits]
-    (cond
-      (= (:unit limits) :rows) (take (:size limits))
-      (= (:unit limits) :bytes) (take-bytes (:size limits))
-      (contains? limits :custom-limit-xform) (:custom-limit-xform limits)
-      :else (throw (ex-info "limits must be specified!" {}))))
 
 (defn parse [size-str]
   (let [[_ number order unit] (re-matches (re-pattern size-patern) size-str)
