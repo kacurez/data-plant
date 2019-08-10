@@ -1,5 +1,5 @@
-(ns kacurez.data-plant.transducers-test
-  (:require [kacurez.data-plant.transducers :as sut]
+(ns kacurez.data-plant.csv.transduction-test
+  (:require [kacurez.data-plant.csv.transduction :as sut]
             [clojure.test :refer :all]))
 
 (deftest csv-enclose-columns
