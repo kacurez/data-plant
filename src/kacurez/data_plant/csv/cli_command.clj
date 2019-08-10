@@ -36,7 +36,7 @@
    System/out
    #(random-map-from-functions-map parsed-definition-map)
    (map str (keys parsed-definition-map))
-   parsed-size
+   (:xform parsed-size)
    options))
 
 (defn prepare-run-command [size-cli-arg definition-cli-arg options]

@@ -10,10 +10,10 @@
 
 (def size-patern #"(?i)^(\d+)([kmg])?(rows|b|bytes)")
 
-(defn create-size-limiter [size unit]
+(defn create-parsed-structure [size unit]
   (case unit
-    :rows (take size)
-    :bytes (take-bytes size)))
+    :rows  {:xform (take size)       :value size :unit unit}
+    :bytes {:xform (take-bytes size) :value size :unit unit}))
 
 (defn parse [size-str]
   (let [[_ number order unit] (re-matches (re-pattern size-patern) size-str)
@@ -25,4 +25,4 @@
       :else
       (let [size (* (Integer/parseInt number) order-num)
             unit (unit-map (clojure.string/lower-case unit))]
-        (create-size-limiter size unit)))))
+        (create-parsed-structure size unit)))))
