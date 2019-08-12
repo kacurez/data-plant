@@ -35,5 +35,15 @@
     (is (= (count (eval-xform-rows-count "99krows" 200000)) 99000))
     (is (= (count (eval-xform-rows-count "1Mrows" 1200000)) 1000000))
     (is (= (count (eval-xform-bytes-count "2kb" 1000)) 2000))
-    (is (= (count (eval-xform-bytes-count "1MB" 200000)) 1000000))
-    (is (= (count (eval-xform-bytes-count "11kb" 10000)) 11000))))
+    (is (= (count (eval-xform-bytes-count "11kb" 10000)) 11000)))
+
+  (testing "assert invalid input"
+    (is (thrown-with-msg? Exception #"invalid size:" (sut/parse "")))
+    (is (thrown-with-msg? Exception #"invalid size:foobar" (sut/parse "foobar")))
+    (is (thrown-with-msg? Exception #"invalid size:2Ktows" (sut/parse "2Ktows")))
+    (is (thrown-with-msg? Exception #"invalid size:2r0rows" (sut/parse "2r0rows")))
+    (is (thrown-with-msg? Exception #"invalid size:2 rows" (sut/parse "2 rows")))
+    (is (thrown-with-msg? Exception #"invalid size:1234" (sut/parse "1234")))
+    (is (thrown-with-msg? Exception #"invalid size:rows" (sut/parse "rows")))
+    (is (thrown-with-msg? Exception #"invalid size:1brows" (sut/parse "1brows")))
+    (is (thrown-with-msg? Exception #"invalid size:2rb" (sut/parse "2rb")))))
