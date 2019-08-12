@@ -41,7 +41,7 @@
     (symbol? def-value) (make-symbol-gen-fn def-value)
     (list? def-value) (condp = (first def-value)
                         'oneOf (make-oneof-gen-fn (rest def-value)))
-    (nil? def-value) (constantly "nil")))
+    (nil? def-value) (constantly "")))
 
 (defn- parse-definition-pair [[def-name, def-value]]
   [def-name (parse-definition-value def-value)])
