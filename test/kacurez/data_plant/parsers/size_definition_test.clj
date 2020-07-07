@@ -1,6 +1,6 @@
-(ns kacurez.data-plant.parsers.size-parser-test
-  (:require [kacurez.data-plant.parsers.size-parser :as sut]
-            [clojure.test :refer :all]))
+(ns kacurez.data-plant.parsers.size-definition-test
+  (:require [clojure.test :refer :all]
+            [kacurez.data-plant.parsers.size-definition :as sut]))
 
 (defn assert-parsed-size [parsed-size expected-value expected-unit]
   (and (= (:unit parsed-size) expected-unit)

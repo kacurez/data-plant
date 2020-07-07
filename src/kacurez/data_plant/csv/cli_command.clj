@@ -5,7 +5,7 @@
             [kacurez.data-plant.parsers.data-definition
              :refer
              [parse-definition-map]]
-            [kacurez.data-plant.parsers.size-parser :as size-parser]))
+            [kacurez.data-plant.parsers.size-definition :as size-definition]))
 
 (defn usage [options-summary]
   (->> ["Usage: data-plant csv size definition-map"
@@ -31,7 +31,7 @@
    ["-d" "--delimiter DELIMITER" "csv delimiter" :default ","]])
 
 (defn prepare-run-command [size-cli-arg definition-cli-arg options]
-  (let [parsed-size (size-parser/parse-to-xform size-cli-arg)
+  (let [parsed-size (size-definition/parse-to-xform size-cli-arg)
         parsed-columns-definition (parse-definition-map definition-cli-arg)]
     {:run #(generate-random-csv-to-stream System/out parsed-size parsed-columns-definition options)}))
 
