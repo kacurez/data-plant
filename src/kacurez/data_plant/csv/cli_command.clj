@@ -1,7 +1,7 @@
 (ns kacurez.data-plant.csv.cli-command
   (:require [clojure.string :as string]
             [clojure.tools.cli :refer [parse-opts]]
-            [kacurez.data-plant.csv.core :refer [write-csv-to-stream]]
+            [kacurez.data-plant.csv.core :refer [generate-random-csv-to-stream]]
             [kacurez.data-plant.parsers.data-definition
              :refer
              [parse-definition-map]]
@@ -32,8 +32,8 @@
 
 (defn prepare-run-command [size-cli-arg definition-cli-arg options]
   (let [parsed-size (size-parser/parse-to-xform size-cli-arg)
-        parsed-definition (parse-definition-map definition-cli-arg)]
-    {:run #(write-csv-to-stream System/out parsed-size parsed-definition options)}))
+        parsed-columns-definition (parse-definition-map definition-cli-arg)]
+    {:run #(generate-random-csv-to-stream System/out parsed-size parsed-columns-definition options)}))
 
 (defn parse-args [args]
   (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)

@@ -1,5 +1,4 @@
-(ns kacurez.data-plant.csv.transducers
-  (:require [kacurez.data-plant.commons :refer [transduce-to-stream]]))
+(ns kacurez.data-plant.csv.transducers)
 
 (defn csv-enclose-columns [enclosure]
   (map (fn [columns]
@@ -42,11 +41,3 @@
    (add-header-coll header-coll)
    (colls-to-csv-stringlines delimiter enclosure)
    size-limiter))
-
-(defn transduce-csv-to-stream
-  [output-stream maps-generator-fn header-coll size-limiter-xf
-   {:keys [delimiter enclosure gzip?]
-    :or {delimiter "," enclosure "\"" gzip? false}}]
-  (let [map-cols (repeatedly maps-generator-fn)
-        csv-xf (compose-csv-xf size-limiter-xf header-coll delimiter enclosure)]
-    (transduce-to-stream output-stream csv-xf map-cols gzip?)))
