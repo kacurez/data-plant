@@ -1,4 +1,4 @@
-(ns kacurez.data-plant.transduction)
+(ns kacurez.data-plant.commons)
 
 (defn take-bytes
   "return transducers that will count bytes of streamed input and force stop when reach tje limit-size"

@@ -1,5 +1,5 @@
 (ns kacurez.data-plant.csv.transduction
-  (:require [kacurez.data-plant.transduction :refer [transduce-to-stream]]))
+  (:require [kacurez.data-plant.commons :refer [transduce-to-stream]]))
 
 (defn csv-enclose-columns [enclosure]
   (map (fn [columns]
