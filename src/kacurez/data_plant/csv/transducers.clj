@@ -32,12 +32,12 @@
                               (reset! added? true)
                               (xf (xf result header-coll) input))))))))
 
-(defn maps-to-colls [header]
+(defn maps-values-to-colls [header]
   (map (fn [line-map] (map #(line-map % "") header))))
 
-(defn compose-csv-xf [size-limiter header-coll delimiter enclosure]
+(defn maps-to-csv-lines [size-limiter header-coll delimiter enclosure]
   (comp
-   (maps-to-colls header-coll)
+   (maps-values-to-colls header-coll)
    (add-header-coll header-coll)
    (colls-to-csv-stringlines delimiter enclosure)
    size-limiter))
