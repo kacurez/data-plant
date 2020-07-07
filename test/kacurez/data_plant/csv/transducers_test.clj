@@ -53,5 +53,7 @@
 (deftest maps-collection-to-csv-lines
   (testing "collection maps to csv string"
     (let [input [{"a" 1 "b" 2} {"a" 21 "b" 22 "c" 33}]
-          result '("\"a\",\"b\"\n" "\"1\",\"2\"\n" "\"21\",\"22\"\n")]
-      (is (= (eduction (sut/maps-to-csv-lines (map identity) ["a" "b"] "," "\"") input) result)))))
+          result '("\"a\",\"b\"\n"
+                   "\"1\",\"2\"\n"
+                   "\"21\",\"22\"\n")]
+      (is (= (eduction (sut/maps-to-csv-lines ["a" "b"] "," "\"") input) result)))))

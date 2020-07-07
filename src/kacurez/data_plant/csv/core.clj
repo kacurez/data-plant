@@ -10,5 +10,6 @@
   (let [header (map str (keys columns-definition-map))
         random-maps-coll (repeatedly #(random-map-from-functions-map columns-definition-map))
         size-limit-xf (:xform parsed-size)
-        csv-xf (maps-to-csv-lines size-limit-xf header delimiter enclosure)]
-    (transduce-to-stream output-stream csv-xf random-maps-coll gzip?)))
+        csv-xf (maps-to-csv-lines header delimiter enclosure)
+        xf (comp csv-xf size-limit-xf)]
+    (transduce-to-stream output-stream xf random-maps-coll gzip?)))

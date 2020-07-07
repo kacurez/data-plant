@@ -35,9 +35,8 @@
 (defn maps-values-to-colls [header]
   (map (fn [line-map] (map #(line-map % "") header))))
 
-(defn maps-to-csv-lines [size-limiter header-coll delimiter enclosure]
+(defn maps-to-csv-lines [header-coll delimiter enclosure]
   (comp
    (maps-values-to-colls header-coll)
    (add-header-coll header-coll)
-   (colls-to-csv-stringlines delimiter enclosure)
-   size-limiter))
+   (colls-to-csv-stringlines delimiter enclosure)))
