@@ -1,4 +1,4 @@
-(ns kacurez.data-plant.parsers.data-definition-parser
+(ns kacurez.data-plant.parsers.data-definition
   (:require [clojure.tools.reader.edn :as edn]
             [kacurez.data-plant.generators :as gen]))
 

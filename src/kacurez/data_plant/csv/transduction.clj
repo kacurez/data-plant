@@ -44,9 +44,9 @@
    size-limiter))
 
 (defn transduce-csv-to-stream
-  [output-stream maps-generator-fn header-coll size-limiter
+  [output-stream maps-generator-fn header-coll size-limiter-xf
    {:keys [delimiter enclosure gzip?]
     :or {delimiter "," enclosure "\"" gzip? false}}]
   (let [map-cols (repeatedly maps-generator-fn)
-        csv-xf (compose-csv-xf size-limiter header-coll delimiter enclosure)]
+        csv-xf (compose-csv-xf size-limiter-xf header-coll delimiter enclosure)]
     (transduce-to-stream output-stream csv-xf map-cols gzip?)))

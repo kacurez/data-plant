@@ -1,12 +1,11 @@
 (ns kacurez.data-plant.csv.cli-command
   (:require [clojure.string :as string]
             [clojure.tools.cli :refer [parse-opts]]
-            [kacurez.data-plant.parsers.data-definition-parser
+            [kacurez.data-plant.csv.core :refer [write-csv-to-stream]]
+            [kacurez.data-plant.parsers.data-definition
              :refer
              [parse-definition-map]]
-            [kacurez.data-plant.parsers.size-parser :as size-parser]
-            [kacurez.data-plant.csv.transduction :refer [transduce-csv-to-stream]]
-            [kacurez.data-plant.generators :refer [random-map-from-functions-map]]))
+            [kacurez.data-plant.parsers.size-parser :as size-parser]))
 
 (defn usage [options-summary]
   (->> ["Usage: data-plant csv size definition-map"
@@ -31,18 +30,10 @@
    ["-e" "--enclosure ENCLOSURE" "csv enclosure" :default "\""]
    ["-d" "--delimiter DELIMITER" "csv delimiter" :default ","]])
 
-(defn run [parsed-size parsed-definition-map options]
-  (transduce-csv-to-stream
-   System/out
-   #(random-map-from-functions-map parsed-definition-map)
-   (map str (keys parsed-definition-map))
-   (:xform parsed-size)
-   options))
-
 (defn prepare-run-command [size-cli-arg definition-cli-arg options]
-  (let [parsed-size (size-parser/parse size-cli-arg)
+  (let [parsed-size (size-parser/parse-to-xform size-cli-arg)
         parsed-definition (parse-definition-map definition-cli-arg)]
-    {:run #(run parsed-size parsed-definition options)}))
+    {:run #(write-csv-to-stream System/out parsed-size parsed-definition options)}))
 
 (defn parse-args [args]
   (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)
