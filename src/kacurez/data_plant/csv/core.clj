@@ -1,5 +1,5 @@
 (ns kacurez.data-plant.csv.core
-  (:require [kacurez.data-plant.csv.transduction :refer [transduce-csv-to-stream]]
+  (:require [kacurez.data-plant.csv.transducers :refer [transduce-csv-to-stream]]
             [kacurez.data-plant.generators :refer [random-map-from-functions-map]]))
 
 (defn write-csv-to-stream [stream parsed-size parsed-definition-map options]
