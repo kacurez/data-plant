@@ -1,7 +1,12 @@
 (ns kacurez.data-plant.csv.transducers)
 
+(defn escape-pattern-char [string]
+  (if (clojure.string/includes? "\\|()[]+.?*^$" string)
+    (str "\\" string)
+    string))
+
 (defn enclose-string? [string delimiter enclosure]
-  (some #{(.charAt enclosure 0) (.charAt delimiter 0) \return \newline \tab} string))
+  (re-find (re-pattern (str "\n|\r|\t|" (escape-pattern-char enclosure) "|" (escape-pattern-char delimiter))) string))
 
 (defn enclose-column [delimiter enclosure]
   (fn [column]
