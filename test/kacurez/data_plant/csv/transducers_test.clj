@@ -46,9 +46,10 @@
 
 (deftest maps-values-to-colls
   (testing "maps to collections"
-    (let [input [{:a 1 :b 2} {:a 21 :b 22 :c 33}]
+    (let [input [{:header [:a :b] :row {:a 1 :b 2}}
+                 {:header [:a :b] :row {:a 21 :b 22 :c 33}}]
           result [[1 2] [21 22]]]
-      (is (= (eduction (sut/maps-values-to-colls [:a :b]) input) result)))))
+      (is (= (eduction (sut/maps-values-to-colls) input) result)))))
 
 (deftest maps-collection-to-csv-lines
   (testing "collection maps to csv string"

@@ -46,11 +46,31 @@
                               (reset! added? true)
                               (xf (xf result header-coll) input))))))))
 
-(defn maps-values-to-colls [header]
-  (map (fn [line-map] (map #(line-map % "") header))))
+(defn maps-values-to-colls []
+  (map (fn [csv-item] (map #((:row csv-item) % "") (:header csv-item)))))
+
+(defn fetch-header-from-row [row-map former-header]
+  (let [new-columns (filter #(not-any? (partial = %) former-header) (keys row-map))
+        old-columns (filter (partial contains? row-map) former-header)]
+    (concat  old-columns new-columns)))
+
+(defn fetch-header [former-header]
+  (fn [xf]
+    (let [header (atom nil)]
+      (fn
+        ([] (xf))
+        ([result] (xf result))
+        ([result input] (if (some? @header)
+                          (xf result {:header @header :row input})
+                          ; else
+                          (do
+                            (reset! header (fetch-header-from-row input former-header))
+                            (xf
+                             (xf result {:header @header :row (zipmap @header @header)})
+                             {:header @header :row input}))))))))
 
 (defn maps-to-csv-lines [header-coll delimiter enclosure]
   (comp
-   (maps-values-to-colls header-coll)
-   (add-header-coll header-coll)
+   (fetch-header header-coll)
+   (maps-values-to-colls)
    (colls-to-csv-stringlines delimiter enclosure)))
