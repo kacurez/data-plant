@@ -6,7 +6,8 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/data.generators "0.1.2"]
                  [org.clojure/tools.reader "1.3.2"]
-                 [org.clojure/tools.cli "0.4.1"]]
+                 [org.clojure/tools.cli "0.4.1"]
+                 [org.clojure/data.csv "1.0.0"]]
   :main ^:skip-aot kacurez.data-plant.cli
   :plugins [[io.taylorwood/lein-native-image "0.3.0"]]
   :target-path "target/"
