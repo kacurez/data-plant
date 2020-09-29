@@ -49,12 +49,12 @@
 (defn maps-values-to-colls []
   (map (fn [csv-item] (map #((:row csv-item) % "") (:header csv-item)))))
 
-(defn fetch-header-from-row [row-map former-header]
-  (let [new-columns (filter #(not-any? (partial = %) former-header) (keys row-map))
-        old-columns (filter (partial contains? row-map) former-header)]
+(defn fetch-header-from-row [first-row-map first-row-coll]
+  (let [new-columns (filter #(not-any? (partial = %) first-row-coll) (keys first-row-map))
+        old-columns (filter (partial contains? first-row-map) first-row-coll)]
     (concat  old-columns new-columns)))
 
-(defn fetch-header [former-header]
+(defn fetch-header [first-row-coll]
   (fn [xf]
     (let [header (atom nil)]
       (fn
@@ -64,13 +64,13 @@
                           (xf result {:header @header :row input})
                           ; else
                           (do
-                            (reset! header (fetch-header-from-row input former-header))
+                            (reset! header (fetch-header-from-row input first-row-coll))
                             (xf
                              (xf result {:header @header :row (zipmap @header @header)})
                              {:header @header :row input}))))))))
 
-(defn maps-to-csv-lines [header-coll delimiter enclosure]
+(defn maps-to-csv-lines [first-row-coll delimiter enclosure]
   (comp
-   (fetch-header header-coll)
+   (fetch-header first-row-coll)
    (maps-values-to-colls)
    (colls-to-csv-stringlines delimiter enclosure)))
