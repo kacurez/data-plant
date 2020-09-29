@@ -1,4 +1,5 @@
-(ns kacurez.data-plant.commons)
+(ns kacurez.data-plant.commons
+  (:require [clojure.java.io :as io]))
 
 (defn take-bytes
   "return transducers that will count bytes of streamed input and force stop when reach tje limit-size"
@@ -34,7 +35,26 @@
      (constantly nil)
      coll)))
 
-#_(defn transduce-file->file [from-path to-path xf stream->coll-fn])
+(defn- prepare-input-stream [path]
+  (if (clojure.string/ends-with? path ".gz")
+    (java.util.zip.GZIPInputStream. (io/input-stream path))
+    ;; else
+    (io/input-stream path)))
+
+(defn transduce-file->file [from-path to-path xf input-stream->coll-fn gzip-output?]
+  (with-open [reader (io/reader (prepare-input-stream from-path))
+              writer (io/output-stream to-path)]
+    (transduce-coll->stream writer
+                            xf
+                            (input-stream->coll-fn reader)
+                            gzip-output?)))
+
+(defn transduce-file->stream [from-path to-stream xf input-stream->coll-fn gzip-output?]
+  (with-open [reader (io/reader (prepare-input-stream from-path))]
+    (transduce-coll->stream to-stream
+                            xf
+                            (input-stream->coll-fn reader)
+                            gzip-output?)))
 
 #_(defn transduce-to-file  [filepath xf coll-generator gzip?]
     (with-open [w (clojure.java.io/output-stream filepath)]
