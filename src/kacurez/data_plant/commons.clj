@@ -22,18 +22,20 @@
      (java.util.zip.GZIPOutputStream. output-stream)
      output-stream)))
 
-(defn compose-writer [xf writer]
+(defn- compose-writer [xf writer]
   (comp
    xf
    (map #(.write writer %))))
 
-(defn transduce-to-stream [output-stream xf coll gzip?]
+(defn transduce-coll->stream [output-stream xf coll gzip?]
   (with-open [writer (prepare-stream-writer output-stream gzip?)]
     (transduce
      (compose-writer xf writer)
      (constantly nil)
      coll)))
 
-(defn transduce-to-file  [filepath xf coll-generator gzip?]
-  (with-open [w (clojure.java.io/output-stream filepath)]
-    (transduce-to-stream w xf coll-generator gzip?)))
+#_(defn transduce-file->file [from-path to-path xf stream->coll-fn])
+
+#_(defn transduce-to-file  [filepath xf coll-generator gzip?]
+    (with-open [w (clojure.java.io/output-stream filepath)]
+      (transduce-to-stream w xf coll-generator gzip?)))

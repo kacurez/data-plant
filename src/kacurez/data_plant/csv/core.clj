@@ -1,7 +1,7 @@
 (ns kacurez.data-plant.csv.core
   (:require [kacurez.data-plant.csv.transducers :refer [maps-to-csv-lines]]
             [kacurez.data-plant.generators :refer [random-map-from-functions-map]]
-            [kacurez.data-plant.commons :refer [transduce-to-stream]]))
+            [kacurez.data-plant.commons :refer [transduce-coll->stream]]))
 
 (defn generate-random-csv-to-stream
   [output-stream parsed-size columns-definition-map
@@ -12,4 +12,4 @@
         size-limit-xf (:xform parsed-size)
         csv-xf (maps-to-csv-lines header delimiter enclosure)
         xf (comp csv-xf size-limit-xf)]
-    (transduce-to-stream output-stream xf random-maps-coll gzip?)))
+    (transduce-coll->stream output-stream xf random-maps-coll gzip?)))
