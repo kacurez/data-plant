@@ -1,8 +1,10 @@
 (ns kacurez.data-plant.csv.core
-  (:require [kacurez.data-plant.csv.transducers :refer [maps-to-csv-lines]]
+  (:require [clojure.data.csv :refer [read-csv]]
+            [kacurez.data-plant.csv.transducers :refer [maps-to-csv-lines]]
             [kacurez.data-plant.generators :refer [random-map-from-functions-map]]
-            [kacurez.data-plant.commons :refer [transduce-coll->stream transduce-file->stream]]
-            [clojure.data.csv :refer [read-csv]]))
+            [kacurez.data-plant.output
+             :refer
+             [transduce-coll->stream transduce-file->stream]]))
 
 (defn generate-random-csv-to-stream
   [output-stream parsed-size columns-definition-map

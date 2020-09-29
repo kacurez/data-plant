@@ -1,6 +1,6 @@
 (ns kacurez.data-plant.random-file.cli-command
-  (:require [kacurez.data-plant.commons :refer [transduce-coll->stream]]
-            [kacurez.data-plant.generators :refer [random-string-var-size]]))
+  (:require [kacurez.data-plant.generators :refer [random-string-var-size]]
+            [kacurez.data-plant.output :refer [transduce-coll->stream]]))
 
 ;;; todo unfinished
 (defn generate [gzip?]

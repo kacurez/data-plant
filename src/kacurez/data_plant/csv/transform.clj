@@ -1,8 +1,10 @@
 (ns kacurez.data-plant.csv.transform
   (:require [clojure.data.csv :refer [read-csv]]
-            [kacurez.data-plant.commons :refer [transduce-coll->stream transduce-file->file]]
+            [clojure.java.io :as io]
             [kacurez.data-plant.csv.transducers :refer [maps-to-csv-lines]]
-            [clojure.java.io :as io]))
+            [kacurez.data-plant.output
+             :refer
+             [transduce-coll->stream transduce-file->file]]))
 
 (defn csv-data->maps [csv-data csv-header]
   (map zipmap
