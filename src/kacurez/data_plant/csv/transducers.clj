@@ -54,7 +54,7 @@
         old-columns (filter (partial contains? first-row-map) first-row-coll)]
     (concat  old-columns new-columns)))
 
-(defn fetch-header [first-row-coll]
+(defn supply-header []
   (fn [xf]
     (let [header (atom nil)]
       (fn
@@ -64,13 +64,24 @@
                           (xf result {:header @header :row input})
                           ; else
                           (do
-                            (reset! header (fetch-header-from-row input first-row-coll))
+                            (reset! header (keys input))
                             (xf
                              (xf result {:header @header :row (zipmap @header @header)})
                              {:header @header :row input}))))))))
 
-(defn maps-to-csv-lines [first-row-coll delimiter enclosure]
+(defn maps-to-csv-lines [delimiter enclosure]
   (comp
-   (fetch-header first-row-coll)
+   (supply-header)
    (maps-values-to-colls)
    (colls-to-csv-stringlines delimiter enclosure)))
+
+(defn str-colls-to-csv-maps []
+  (fn [xf]
+    (let [header (atom nil)]
+      (fn
+        ([] (xf))
+        ([result] (xf result))
+        ([result input] (if (some? @header)
+                          (xf result (zipmap @header input))
+                          ; else
+                          (reset! header input)))))))

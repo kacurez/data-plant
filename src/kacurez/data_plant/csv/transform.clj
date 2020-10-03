@@ -1,7 +1,7 @@
 (ns kacurez.data-plant.csv.transform
   (:require [clojure.data.csv :refer [read-csv]]
             [clojure.java.io :as io]
-            [kacurez.data-plant.csv.transducers :refer [maps-to-csv-lines]]
+            [kacurez.data-plant.csv.transducers :refer [maps-to-csv-lines str-colls-to-csv-maps]]
             [kacurez.data-plant.output
              :refer
              [transduce-coll->stream transduce-file->file]]))
@@ -37,16 +37,14 @@
               writer (io/output-stream to)]
     (transduce-coll->stream writer
                             (comp
-                             (printxf)
-                             (fetch-header)
-                             (drop 1)
-
+                             #_(printxf)
+                             (str-colls-to-csv-maps)
                              #_(eval (read-string "(set-column \"aaa\" \"33\")"))
                              #_(printxf #(nil? (% "column4")))
                              ;; (filter #(not-empty (% "column4")))
-                             ;; (map #(dissoc % \"column3\"))
+                             (map #(dissoc % "column2"))
                              ;; (map #(assoc % "anewColumn" "2"))
-                             (maps-to-csv-lines {} "," "\""))
+                             (maps-to-csv-lines "," "\""))
                             (read-csv reader)
                             #_(csv-data->maps csv-data csv-header)
                             false)))

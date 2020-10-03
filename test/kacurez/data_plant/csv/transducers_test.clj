@@ -57,4 +57,4 @@
           result '("\"a,\",b\n"
                    "1,2\n"
                    "21,22\n")]
-      (is (= (eduction (sut/maps-to-csv-lines ["a," "b"] "," "\"") input) result)))))
+      (is (= (eduction (sut/maps-to-csv-lines "," "\"") input) result)))))

@@ -52,3 +52,7 @@
       (into {} (map parse-definition-pair definition-map)))
     (catch Exception e (throw (Exception. (str "data definition parse error: "
                                                (.getMessage e)))))))
+
+(defn parse-to-xform [definition-string]
+  (let [functions-map (parse-definition-map definition-string)]
+    (apply comp (map (fn [[key gen-fn]] (map #(assoc % (str key) (str (gen-fn))))) functions-map))))
