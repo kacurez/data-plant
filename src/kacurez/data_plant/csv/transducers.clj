@@ -36,17 +36,6 @@
     (csv-delimit-columns delimiter)
     (add-new-line))))
 
-(defn add-header-coll [header-coll]
-  (fn [xf]
-    (let [added? (atom false)]
-      (fn
-        ([] (xf))
-        ([result] (xf result))
-        ([result input] (if @added? (xf result input)
-                            (do
-                              (reset! added? true)
-                              (xf (xf result header-coll) input))))))))
-
 (defn maps-values-to-colls []
   (map (fn [csv-item] (map #((:row csv-item) % "") (:header csv-item)))))
 

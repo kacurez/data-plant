@@ -38,12 +38,6 @@
           result ["a,b,c\n" "d,e,f\n"]]
       (is (= (eduction (sut/colls-to-csv-stringlines "," "|") input) result)))))
 
-(deftest add-header-coll
-  (testing "add header to the collection"
-    (let [input [["a1" "b1"] ["a2" "b2"]]
-          result [["columnA" "columnB"] ["a1" "b1"] ["a2" "b2"]]]
-      (is (= (eduction (sut/add-header-coll ["columnA" "columnB"]) input) result)))))
-
 (deftest maps-values-to-colls
   (testing "maps to collections"
     (let [input [{:header [:a :b] :row {:a 1 :b 2}}
