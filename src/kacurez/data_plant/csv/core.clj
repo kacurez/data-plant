@@ -5,7 +5,7 @@
              :refer
              [transduce-coll->stream transduce-file->stream]]))
 
-(defn generate-random-csv-to-stream
+(defn generate-random-csv->stream
   [parsed-size output-stream transformation-xf
    {:keys [delimiter enclosure gzip?]
     :or {delimiter "," enclosure "\"" gzip? false}}]
@@ -14,7 +14,7 @@
         xf (comp transformation-xf csv-xf size-limit-xf)]
     (transduce-coll->stream output-stream xf (repeat {}) gzip?)))
 
-(defn transduce-csv-file->stream
+(defn transform-csv-file->stream
   [csv-file-path output-stream transformation-xf {:keys [delimiter enclosure gzip?]
                                                   :or {delimiter "," enclosure "\"" gzip? false}}]
   (let

@@ -1,7 +1,7 @@
 (ns kacurez.data-plant.csv.cli-command
   (:require [clojure.string :as string]
             [clojure.tools.cli :refer [parse-opts]]
-            [kacurez.data-plant.csv.core :refer [generate-random-csv-to-stream transduce-csv-file->stream]]
+            [kacurez.data-plant.csv.core :refer [generate-random-csv->stream transform-csv-file->stream]]
             [kacurez.data-plant.parsers.data-definition
              :as data-definition]
             [kacurez.data-plant.parsers.xform-definition :as xform-definition]
@@ -38,9 +38,9 @@
         xf (if xform? (xform-definition/parse-to-xform definition-cli-arg)
                (data-definition/parse-to-xform definition-cli-arg))]
     (if file?
-      {:run #(transduce-csv-file->stream source System/out xf options)}
+      {:run #(transform-csv-file->stream source System/out xf options)}
       ;; else
-      {:run #(generate-random-csv-to-stream source System/out xf options)})))
+      {:run #(generate-random-csv->stream source System/out xf options)})))
 
 (defn parse-args [args]
   (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)
