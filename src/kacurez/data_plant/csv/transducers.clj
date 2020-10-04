@@ -50,11 +50,6 @@
 (defn maps-values-to-colls []
   (map (fn [csv-item] (map #((:row csv-item) % "") (:header csv-item)))))
 
-(defn fetch-header-from-row [first-row-map first-row-coll]
-  (let [new-columns (filter #(not-any? (partial = %) first-row-coll) (keys first-row-map))
-        old-columns (filter (partial contains? first-row-map) first-row-coll)]
-    (concat  old-columns new-columns)))
-
 (defn supply-header []
   (fn [xf]
     (let [header (atom nil)]

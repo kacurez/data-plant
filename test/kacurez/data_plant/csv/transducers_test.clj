@@ -4,8 +4,8 @@
 
 (deftest csv-enclose-columns
   (testing "enclose with doble quote"
-    (let [input [["addd" "b" "cf" "" "\n"]]
-          result [["addd" "b" "cf" "" "\"\n\""]]]
+    (let [input [["addd" 1 "b" "cf" "" "\n"]]
+          result [["addd" "1" "b" "cf" "" "\"\n\""]]]
       (is (= (eduction (sut/csv-enclose-columns "," "\"") input) result))))
   (testing "enclose with |"
     (let [input [["addd" "b" "cf" "," "\n"]]
@@ -51,6 +51,14 @@
           result [[1 2] [21 22]]]
       (is (= (eduction (sut/maps-values-to-colls) input) result)))))
 
+(deftest supply-header
+  (testing "supply header fn"
+    (let [input [{:a 1 :b 2} {:a 12 :b 22}]
+          result [{:header [:a :b] :row {:a :a :b :b}}
+                  {:header [:a :b] :row {:a 1 :b 2}}
+                  {:header [:a :b] :row {:a 12 :b 22}}]]
+      (is (= (eduction (sut/supply-header) input) result)))))
+
 (deftest maps-collection-to-csv-lines
   (testing "collection maps to csv string"
     (let [input [{"a," "1" "b" "2"} {"a," "21" "b" "22" "c" "33"}]
@@ -58,3 +66,12 @@
                    "1,2\n"
                    "21,22\n")]
       (is (= (eduction (sut/maps-to-csv-lines "," "\"") input) result)))))
+
+(deftest str-colls-to-csv-maps
+  (testing "str-colls-to-csv-maps fn"
+    (let [input [["col1" "col2" "col3"]
+                 ["val1" "val2" ""]
+                 [1 2 3]]
+          result [{"col1" "val1" "col2" "val2" "col3" ""}
+                  {"col1" 1 "col2" 2 "col3" 3}]]
+      (is (= (eduction (sut/str-colls-to-csv-maps) input) result)))))
