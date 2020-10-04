@@ -10,13 +10,12 @@
 
 (defn enclose-column [delimiter enclosure]
   (fn [column]
-    (let [column-str (str column)]
-      (if (enclose-string? column-str delimiter enclosure)
-        (str enclosure
-             (clojure.string/replace column-str enclosure (str enclosure enclosure))
-             enclosure)
-        ;; else
-        column-str))))
+    (if (enclose-string? column delimiter enclosure)
+      (str enclosure
+           (clojure.string/replace column enclosure (str enclosure enclosure))
+           enclosure)
+      ;; else
+      column)))
 
 (defn csv-enclose-columns [delimiter enclosure]
   (map (fn [columns]
@@ -37,7 +36,7 @@
     (add-new-line))))
 
 (defn maps-values-to-colls []
-  (map (fn [csv-item] (map #((:row csv-item) % "") (:header csv-item)))))
+  (map (fn [csv-item] (map #(str ((:row csv-item) % "")) (:header csv-item)))))
 
 (defn supply-header []
   (fn [xf]

@@ -4,7 +4,7 @@
 
 (deftest csv-enclose-columns
   (testing "enclose with doble quote"
-    (let [input [["addd" 1 "b" "cf" "" "\n"]]
+    (let [input [["addd" "1" "b" "cf" "" "\n"]]
           result [["addd" "1" "b" "cf" "" "\"\n\""]]]
       (is (= (eduction (sut/csv-enclose-columns "," "\"") input) result))))
   (testing "enclose with |"
@@ -42,7 +42,7 @@
   (testing "maps to collections"
     (let [input [{:header [:a :b] :row {:a 1 :b 2}}
                  {:header [:a :b] :row {:a 21 :b 22 :c 33}}]
-          result [[1 2] [21 22]]]
+          result [["1" "2"] ["21" "22"]]]
       (is (= (eduction (sut/maps-values-to-colls) input) result)))))
 
 (deftest supply-header
