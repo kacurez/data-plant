@@ -58,8 +58,12 @@
     (let [input [{"a," "1" "b" "2"} {"a," "21" "b" "22" "c" "33"}]
           result '("\"a,\",b\n"
                    "1,2\n"
-                   "21,22\n")]
-      (is (= (eduction (sut/maps-to-csv-lines "," "\"") input) result)))))
+                   "21,22\n")
+          result-limited '("\"a,\",b\n"
+                           "1,2\n")]
+      (is (= (eduction (sut/maps-to-csv-lines "," "\"") input) result))
+      (is (= (eduction (sut/maps-to-csv-lines "," "\"" (sut/take-string-coll-bytes 4)) input) result-limited))
+      (is (= (eduction (sut/maps-to-csv-lines "," "\"" (take 2)) input) result-limited)))))
 
 (deftest str-colls-to-csv-maps
   (testing "str-colls-to-csv-maps fn"
@@ -69,3 +73,10 @@
           result [{"col1" "val1" "col2" "val2" "col3" ""}
                   {"col1" 1 "col2" 2 "col3" 3}]]
       (is (= (eduction (sut/str-colls-to-csv-maps) input) result)))))
+
+(deftest take-string-coll-bytes
+  (testing "take-string-coll-bytes"
+    (is (= 250 (count (flatten (eduction (sut/take-string-coll-bytes 500) (take 1000 (repeat ["ab"])))))))
+    (is (= '(["123" "45"]) (eduction (sut/take-string-coll-bytes 5) [["123" "45"] ["67"]])))
+    (is (= '(["123" "45"]) (eduction (sut/take-string-coll-bytes 4) [["123" "45"] ["67"]])))
+    (is (= '(["123" "45"] ["67"]) (eduction (sut/take-string-coll-bytes 10) [["123" "45"] ["67"]])))))

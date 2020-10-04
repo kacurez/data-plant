@@ -10,8 +10,8 @@
    {:keys [delimiter enclosure gzip?]
     :or {delimiter "," enclosure "\"" gzip? false}}]
   (let [size-limit-xf (:xform parsed-size)
-        csv-xf (maps-to-csv-lines delimiter enclosure)
-        xf (comp transformation-xf csv-xf size-limit-xf)]
+        csv-xf (maps-to-csv-lines delimiter enclosure size-limit-xf)
+        xf (comp transformation-xf csv-xf)]
     (transduce-coll->stream output-stream xf (repeat {}) gzip?)))
 
 (defn transform-csv-file->stream
@@ -22,5 +22,6 @@
     enclosure-char (-> enclosure char-array first)
     csv-xf (maps-to-csv-lines delimiter enclosure)
     xf (comp (str-colls-to-csv-maps) transformation-xf csv-xf)
-    split-to-csv-lines-reader-fn (fn [input-reader] (read-csv input-reader :separator delimiter-char :quote enclosure-char))]
+    split-to-csv-lines-reader-fn (fn [input-reader]
+                                   (read-csv input-reader :separator delimiter-char :quote enclosure-char))]
     (transduce-file->stream csv-file-path output-stream xf split-to-csv-lines-reader-fn gzip?)))

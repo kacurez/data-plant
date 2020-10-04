@@ -1,5 +1,21 @@
 (ns kacurez.data-plant.csv.transducers)
 
+(defn take-string-coll-bytes
+  "return transducers that will count bytes of streamed input collection of strings and force stop when reach the limit-size in bytes"
+  [limit-size]
+  (fn [xf]
+    (let [bytes-count (atom limit-size)]
+      (fn
+        ([] (xf))
+        ([result] (xf result))
+        ([result input]
+         (let [new-size (- @bytes-count (count (.getBytes (clojure.string/join input))))]
+           (if (> @bytes-count 0)
+             (do
+               (reset! bytes-count new-size)
+               (xf result input))
+             (reduced result))))))))
+
 (defn escape-pattern-char [string]
   (if (clojure.string/includes? "\\|()[]+.?*^$" string)
     (str "\\" string)
@@ -53,11 +69,14 @@
                              (xf result {:header @header :row (zipmap @header @header)})
                              {:header @header :row input}))))))))
 
-(defn maps-to-csv-lines [delimiter enclosure]
-  (comp
-   (supply-header)
-   (maps-values-to-colls)
-   (colls-to-csv-stringlines delimiter enclosure)))
+(defn maps-to-csv-lines
+  ([delimiter enclosure] (maps-to-csv-lines delimiter enclosure (map identity)))
+  ([delimiter enclosure limit-xf]
+   (comp
+    (supply-header)
+    (maps-values-to-colls)
+    limit-xf
+    (colls-to-csv-stringlines delimiter enclosure))))
 
 (defn str-colls-to-csv-maps []
   (fn [xf]

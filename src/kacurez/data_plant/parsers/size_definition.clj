@@ -1,5 +1,5 @@
 (ns kacurez.data-plant.parsers.size-definition
-  (:require [kacurez.data-plant.output :refer [take-bytes]]))
+  (:require [kacurez.data-plant.csv.transducers :refer [take-string-coll-bytes]]))
 
 (def KB 1000)
 (def MB (* 1000 KB))
@@ -13,7 +13,7 @@
 (defn make-limit-xform [size unit]
   (case unit
     :rows  {:xform (take size)       :value size :unit unit}
-    :bytes {:xform (take-bytes size) :value size :unit unit}))
+    :bytes {:xform (take-string-coll-bytes size) :value size :unit unit}))
 
 (defn parse [size-str]
   (let [[_ number order unit] (re-matches (re-pattern size-patern) size-str)
