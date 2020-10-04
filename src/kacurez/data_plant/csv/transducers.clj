@@ -10,12 +10,13 @@
 
 (defn enclose-column [delimiter enclosure]
   (fn [column]
-    (if (enclose-string? column delimiter enclosure)
-      (str enclosure
-           (clojure.string/replace column enclosure (str enclosure enclosure))
-           enclosure)
-      ; else
-      column)))
+    (let [column-str (str column)]
+      (if (enclose-string? column-str delimiter enclosure)
+        (str enclosure
+             (clojure.string/replace column-str enclosure (str enclosure enclosure))
+             enclosure)
+        ;; else
+        column-str))))
 
 (defn csv-enclose-columns [delimiter enclosure]
   (map (fn [columns]
