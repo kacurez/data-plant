@@ -3,13 +3,13 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.10.1"]
+  :dependencies [[org.clojure/clojure "1.10.2"]
                  [org.clojure/data.generators "0.1.2"]
                  [org.clojure/tools.reader "1.3.3"]
                  [org.clojure/tools.cli "0.4.1"]
                  [org.clojure/data.csv "1.0.0"]]
   :main ^:skip-aot kacurez.data-plant.cli
-  :plugins [[io.taylorwood/lein-native-image "0.3.0"]]
+  :plugins [[io.taylorwood/lein-native-image "0.3.1"]]
   :target-path "target/"
   :uberjar-name "data-plant.jar"
   :native-image {:opts ["--verbose"
