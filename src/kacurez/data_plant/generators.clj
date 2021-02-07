@@ -18,7 +18,7 @@
 
 (defn random-pos-int [] (abs (random-number)))
 
-(defn random-neg-int [] (* -1 (random-number)))
+(defn random-neg-int [] (* -1 (random-pos-int)))
 
 (defn random-date []
   (binding [gen/*rnd* (java.util.Random.)]

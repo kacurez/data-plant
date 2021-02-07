@@ -29,11 +29,12 @@
 (defn- parse-definition-value [_])
 
 (defn- make-oneof-gen-fn [oneof-options-list]
-  (if-let [options (map parse-definition-value oneof-options-list)]
-    (fn []
-      (let [option-gen-fn (nth options (gen/random-number (count options)))]
-        (option-gen-fn)))
-    (constantly "")))
+  (let [options (map parse-definition-value oneof-options-list)]
+    (if (empty? options)
+      (constantly "")
+      (fn []
+        (let [option-gen-fn (nth options (gen/random-number (count options)))]
+          (option-gen-fn))))))
 
 (defn- parse-definition-value [def-value]
   (cond
@@ -41,7 +42,8 @@
     (symbol? def-value) (make-symbol-gen-fn def-value)
     (list? def-value) (condp = (first def-value)
                         'oneOf (make-oneof-gen-fn (rest def-value)))
-    (nil? def-value) (constantly "")))
+    (nil? def-value) (constantly "")
+    :else (throw (Exception. (str "Unknwon data type to parse: " (type def-value) " value:" (str def-value))))))
 
 (defn- parse-definition-pair [[def-name, def-value]]
   [def-name (parse-definition-value def-value)])
