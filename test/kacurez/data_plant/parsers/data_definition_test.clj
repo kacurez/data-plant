@@ -1,7 +1,6 @@
 (ns kacurez.data-plant.parsers.data-definition-test
   (:require [clojure.test :refer :all]
-            [kacurez.data-plant.parsers.data-definition :as sut]
-            [clojure.set :as set]))
+            [kacurez.data-plant.parsers.data-definition :as sut]))
 
 (deftest make-symbol-gen-fn
   (testing "make-symbol-gen-fn test"
