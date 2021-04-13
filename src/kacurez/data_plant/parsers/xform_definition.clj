@@ -1,4 +1,5 @@
-(ns kacurez.data-plant.parsers.xform-definition)
+(ns kacurez.data-plant.parsers.xform-definition
+  (:require [kacurez.data-plant.generators :as gen]))
 
 (defn parse-to-xform [definition-string]
   (try
