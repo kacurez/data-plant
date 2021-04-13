@@ -38,9 +38,9 @@
         xf (if xform? (xform-definition/parse-to-xform definition-cli-arg)
                (data-definition/parse-to-xform definition-cli-arg))]
     (if file?
-      {:run #(transform-csv-file->stream source System/out xf options)}
+      {:run #(transform-csv-file->stream source *out* xf options)}
       ;; else
-      {:run #(generate-random-csv->stream source System/out xf options)})))
+      {:run #(generate-random-csv->stream source *out* xf options)})))
 
 (defn parse-args [args]
   (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)
