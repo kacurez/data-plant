@@ -41,12 +41,12 @@
   ([max-size chars]
    (apply str (take (rand-int max-size) (repeatedly #(rand-nth chars))))))
 
-(defn random-string-seq
+#_(defn random-string-seq
   ([seq-size string-size] (random-string-seq seq-size string-size ascii-chars))
   ([seq-size string-size chars]
    (map (fn [_] (random-string string-size chars)) (range seq-size))))
 
-(defn random-string-map
+#_(defn random-string-map
   ([map-keys string-size] (random-string-map map-keys string-size ascii-chars))
   ([map-keys string-size chars]
    (into {} (map #(vector % (random-string string-size chars)) map-keys))))
@@ -54,7 +54,7 @@
 #_(defn random-map-from-spec [spec-map]
     (into {} (map (fn [[k v]] (vector k (gen/generate (s/gen v)))) spec-map)))
 
-(defn random-map-from-functions-map [functions-map]
-  (into {} (map
-            (fn [[key data-generator-function]] (vector (str key) (str (data-generator-function))))
-            functions-map)))
+#_(defn random-map-from-functions-map [functions-map]
+    (into {} (map
+              (fn [[key data-generator-function]] (vector (str key) (str (data-generator-function))))
+              functions-map)))
