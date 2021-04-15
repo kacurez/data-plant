@@ -10,10 +10,14 @@ before_install:
 
 before_script:
   - export APP_IMAGE=kacurez/data-plant
+  - export APP_IMAGE_NATIVE=kacurez/data-plant-native
   - docker build -t $APP_IMAGE .
+  - docker build -t $APP_IMAGE_NATIVE . -f DockerfileNative
   - docker tag $APP_IMAGE:latest $APP_IMAGE:test
+  - docker tag $APP_IMAGE_NATIVE:latest $APP_IMAGE_NATIVE:test
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker push $APP_IMAGE:test
+  - docker push $APP_IMAGE:latest
+  - docker push $APP_IMAGE_NATIVE:latest
 
 deploy:
   provider: script
