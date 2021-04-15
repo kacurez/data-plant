@@ -8,6 +8,7 @@ RUN cd /opt && curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/do
 RUN ls /opt/graalvm-ce-java11-${GRAAL_VERSION}
 RUN /opt/graalvm-ce-java11-${GRAAL_VERSION}/bin/gu install native-image
 ADD project.clj .
+RUN lein test
 RUN lein deps
 ADD src src
 ADD reflection.json reflection.json
